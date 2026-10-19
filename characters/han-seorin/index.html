@@ -1,0 +1,693 @@
+<title>한서린 캐릭터 시트</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,600;1,400&family=Nanum+Myeongjo:wght@400;700;800&family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: concert-programme cover (cello | name) → analysis table → profile → looks → prompt workbench */
+:root {
+  --bg: #F2F5F1;
+  --surface: #E5EBE5;
+  --ink: #15211C;
+  --muted: #56655D;
+  --line: #C8D3CA;
+  --emerald: #0E5A45;
+  --varnish: #9A4721;
+  --on-accent: #F2F5F1;
+  --f-display: "Bodoni Moda", "Didot", "Times New Roman", serif;
+  --f-kr-display: "Nanum Myeongjo", "AppleMyungjo", "Batang", serif;
+  --f-body: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --step--1: 0.8125rem;
+  --step-0: 1rem;
+  --step-1: 1.25rem;
+  --step-2: 1.75rem;
+  --step-3: clamp(2.25rem, 6vw, 4rem);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0B1411; --surface: #13211C; --ink: #E7EEE9; --muted: #93A69C;
+    --line: #26382F; --emerald: #45B48E; --varnish: #DA8C57; --on-accent: #0B1411;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0B1411; --surface: #13211C; --ink: #E7EEE9; --muted: #93A69C;
+  --line: #26382F; --emerald: #45B48E; --varnish: #DA8C57; --on-accent: #0B1411;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--f-body);
+  font-size: var(--step-0);
+  line-height: 1.7;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+.wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+h1, h2, h3 { text-wrap: balance; margin: 0; }
+h2 {
+  font-family: var(--f-kr-display);
+  font-weight: 800;
+  font-size: var(--step-2);
+  line-height: 1.3;
+}
+h3 { font-size: var(--step-1); font-weight: 600; line-height: 1.4; }
+p { margin: 0; max-width: 65ch; }
+.eyebrow {
+  font-family: var(--f-display);
+  font-style: italic;
+  font-size: var(--step-1);
+  color: var(--varnish);
+  letter-spacing: 0.01em;
+}
+.label {
+  font-size: var(--step--1);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* Hero */
+.hero { padding-block: clamp(32px, 6vw, 72px) clamp(24px, 4vw, 48px); }
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: clamp(24px, 5vw, 64px);
+  align-items: center;
+}
+.cello-art { display: flex; justify-content: center; }
+.cello-art svg { width: 100%; max-width: 260px; height: auto; }
+.hero-text { display: grid; gap: 20px; min-width: 0; }
+.name-en {
+  font-family: var(--f-display);
+  font-weight: 400;
+  font-size: var(--step-3);
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+.name-en em { font-style: italic; color: var(--emerald); }
+.name-kr {
+  font-family: var(--f-kr-display);
+  font-weight: 700;
+  font-size: var(--step-2);
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.name-kr small { font-size: var(--step-0); color: var(--muted); font-weight: 400; }
+.lede { font-size: var(--step-1); line-height: 1.6; color: var(--ink); }
+.facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  border-top: 1px solid var(--line);
+  margin: 0;
+}
+.facts div { padding: 14px 16px 0 0; display: grid; gap: 2px; min-width: 0; }
+.facts dt { font-size: var(--step--1); color: var(--muted); }
+.facts dd { margin: 0; font-weight: 500; }
+.notice {
+  font-size: var(--step--1);
+  color: var(--muted);
+  border-left: 2px solid var(--varnish);
+  padding-left: 12px;
+}
+
+/* Sections */
+section.block { padding-block: clamp(40px, 6vw, 64px); border-top: 1px solid var(--line); }
+.block-head { display: grid; gap: 6px; margin-bottom: 28px; }
+
+/* Analysis table */
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+table { border-collapse: collapse; width: 100%; min-width: 680px; font-size: 0.9375rem; }
+th, td { text-align: left; vertical-align: top; padding: 12px 14px; border-bottom: 1px solid var(--line); }
+thead th { font-weight: 600; border-bottom: 2px solid var(--ink); }
+tbody th { font-weight: 500; color: var(--muted); white-space: nowrap; width: 7.5em; }
+.ref-tag {
+  font-family: var(--f-display);
+  font-style: italic;
+  font-size: var(--step-1);
+  color: var(--varnish);
+  margin-right: 6px;
+}
+
+.takes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 32px;
+}
+.take { display: grid; gap: 8px; align-content: start; min-width: 0; }
+.take p { color: var(--muted); }
+.shared { margin-top: 32px; display: grid; gap: 12px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  font-size: 0.875rem;
+  padding: 4px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+}
+
+/* Profile */
+.profile-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(24px, 5vw, 64px);
+}
+.kv { margin: 0; display: grid; }
+.kv div {
+  display: grid;
+  grid-template-columns: 7.5em minmax(0, 1fr);
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+.kv dt { color: var(--muted); font-size: 0.9375rem; }
+.kv dd { margin: 0; }
+.quote {
+  font-family: var(--f-kr-display);
+  font-size: var(--step-1);
+  line-height: 1.6;
+  margin-top: 24px;
+}
+
+.visual { display: grid; gap: 22px; align-content: start; }
+.visual-item { display: grid; gap: 4px; }
+.visual-item p { color: var(--muted); }
+.mark-callout {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  background: var(--surface);
+  padding: 14px 16px;
+  border-radius: 6px;
+}
+.mark-dot {
+  flex: none;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  position: relative;
+  background: var(--bg);
+}
+.mark-dot::after {
+  content: "";
+  position: absolute;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--ink);
+  left: 15px; top: 26px;
+}
+
+/* Looks */
+.looks {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+.look { display: grid; gap: 12px; align-content: start; min-width: 0; }
+.swatch {
+  aspect-ratio: 2 / 3;
+  max-width: 100%;
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.swatch .gown {
+  width: 58%;
+  height: 72%;
+  border-radius: 46% 46% 6px 6px / 22% 22% 6px 6px;
+  box-shadow: inset -14px 0 28px rgba(0,0,0,0.28), inset 10px 0 20px rgba(255,255,255,0.12);
+}
+.swatch .tag {
+  position: absolute;
+  top: 10px; left: 12px;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(0,0,0,0.35);
+  color: #fff;
+}
+.look-title { font-family: var(--f-display); font-size: var(--step-1); font-style: italic; }
+.look-title b { font-family: var(--f-body); font-style: normal; font-size: var(--step--1); color: var(--varnish); font-weight: 600; margin-right: 6px; letter-spacing: 0.08em; }
+.look p { color: var(--muted); font-size: 0.9375rem; }
+.look .light { font-size: var(--step--1); color: var(--muted); border-top: 1px solid var(--line); padding-top: 8px; }
+
+/* Prompt workbench */
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+.tab {
+  font: inherit;
+  font-size: 0.9375rem;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+.tab:hover { border-color: var(--emerald); }
+.tab[aria-selected="true"] { background: var(--emerald); border-color: var(--emerald); color: var(--on-accent); }
+.tab:focus-visible, .copy:focus-visible { outline: 2px solid var(--varnish); outline-offset: 2px; }
+.prompt-card {
+  background: var(--surface);
+  border-radius: 6px;
+  padding: 18px 18px 14px;
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+}
+.prompt-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.prompt-top p { color: var(--muted); font-size: 0.9375rem; }
+pre.prompt {
+  margin: 0;
+  font-family: var(--f-mono);
+  font-size: 0.8125rem;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 360px;
+  overflow: auto;
+}
+pre.prompt mark {
+  background: transparent;
+  color: var(--emerald);
+  border-bottom: 1px dotted var(--emerald);
+}
+.copy {
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 7px 14px;
+  border-radius: 4px;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--bg);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.copy.done { background: var(--emerald); border-color: var(--emerald); color: var(--on-accent); }
+.legend { font-size: var(--step--1); color: var(--muted); }
+.legend mark { background: transparent; color: var(--emerald); border-bottom: 1px dotted var(--emerald); font-family: var(--f-mono); }
+.neg { margin-top: 20px; }
+
+.tools td:first-child { font-weight: 600; white-space: nowrap; }
+.tools code { font-family: var(--f-mono); font-size: 0.8125rem; }
+
+/* Consistency */
+.steps { margin: 0; padding: 0; list-style: none; counter-reset: s; display: grid; gap: 18px; }
+.steps li { counter-increment: s; display: grid; grid-template-columns: 2.25rem minmax(0, 1fr); gap: 12px; }
+.steps li::before {
+  content: counter(s);
+  font-family: var(--f-display);
+  font-style: italic;
+  font-size: var(--step-2);
+  line-height: 1;
+  color: var(--varnish);
+}
+.steps strong { font-weight: 600; }
+.warn {
+  margin-top: 28px;
+  padding: 16px 18px;
+  border: 1px solid var(--varnish);
+  border-radius: 6px;
+  display: grid;
+  gap: 6px;
+}
+.warn h3 { color: var(--varnish); font-size: var(--step-0); }
+
+footer { padding-block: 32px 48px; border-top: 1px solid var(--line); color: var(--muted); font-size: var(--step--1); }
+
+@media (max-width: 760px) {
+  .hero-grid { grid-template-columns: 1fr; }
+  .cello-art svg { max-width: 150px; }
+  .takes, .looks, .profile-grid { grid-template-columns: 1fr; }
+  .looks { gap: 32px; }
+  .swatch { aspect-ratio: 3 / 2; }
+  .swatch .gown { width: 30%; height: 80%; }
+}
+@media (max-width: 460px) {
+  .facts { grid-template-columns: 1fr 1fr; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .cello-art svg .strings line { transition: opacity .3s; }
+}
+</style>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div class="cello-art" aria-hidden="true">
+      <svg viewBox="0 0 200 530" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="wood" cx="42%" cy="62%" r="70%">
+            <stop offset="0" stop-color="#D08A4E"/>
+            <stop offset="0.45" stop-color="#A4501F"/>
+            <stop offset="1" stop-color="#5C2510"/>
+          </radialGradient>
+          <linearGradient id="neck" x1="0" x2="1">
+            <stop offset="0" stop-color="#7A3A16"/>
+            <stop offset="0.5" stop-color="#B0642D"/>
+            <stop offset="1" stop-color="#6B3112"/>
+          </linearGradient>
+        </defs>
+        <rect x="92" y="34" width="16" height="170" rx="4" fill="url(#neck)"/>
+        <circle cx="100" cy="26" r="15" fill="#8E461C"/>
+        <circle cx="100" cy="26" r="8" fill="#B5682F"/>
+        <circle cx="100" cy="26" r="3" fill="#6B3112"/>
+        <rect x="74" y="50" width="18" height="6" rx="3" fill="#3A1E10"/>
+        <rect x="108" y="62" width="18" height="6" rx="3" fill="#3A1E10"/>
+        <rect x="74" y="74" width="18" height="6" rx="3" fill="#3A1E10"/>
+        <rect x="108" y="86" width="18" height="6" rx="3" fill="#3A1E10"/>
+        <path fill="url(#wood)" d="M100 190 C140 190 168 205 168 245 C168 275 150 290 145 300 C138 312 138 330 146 342 C175 360 184 390 184 420 C184 465 150 492 100 492 C50 492 16 465 16 420 C16 390 25 360 54 342 C62 330 62 312 55 300 C50 290 32 275 32 245 C32 205 60 190 100 190 Z"/>
+        <path fill="none" stroke="#3A1E10" stroke-opacity="0.55" stroke-width="2" d="M100 196 C136 196 162 210 162 245 C162 272 146 288 140 298 C132 312 132 330 141 344 C168 362 178 390 178 420 C178 460 146 486 100 486 C54 486 22 460 22 420 C22 390 32 362 59 344 C68 330 68 312 60 298 C54 288 38 272 38 245 C38 210 64 196 100 196 Z"/>
+        <ellipse cx="82" cy="430" rx="34" ry="26" fill="#E7B07A" opacity="0.28"/>
+        <polygon points="93,60 107,60 113,385 87,385" fill="#16110E"/>
+        <path d="M70 330 c-9 10 9 22 0 34 c-9 12 9 22 0 34" fill="none" stroke="#1C0E07" stroke-width="3.5" stroke-linecap="round"/>
+        <path d="M130 330 c9 10 -9 22 0 34 c9 12 -9 22 0 34" fill="none" stroke="#1C0E07" stroke-width="3.5" stroke-linecap="round"/>
+        <rect x="78" y="398" width="44" height="6" rx="2" fill="#E2C8A0"/>
+        <polygon points="90,418 110,418 106,474 94,474" fill="#16110E"/>
+        <g class="strings" stroke="#D9D2C5" stroke-width="0.8">
+          <line x1="96" y1="50" x2="94.5" y2="420"/>
+          <line x1="98.7" y1="50" x2="98.3" y2="420"/>
+          <line x1="101.3" y1="50" x2="101.7" y2="420"/>
+          <line x1="104" y1="50" x2="105.5" y2="420"/>
+        </g>
+        <line x1="100" y1="492" x2="100" y2="526" stroke="#8A8A86" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="hero-text">
+      <span class="eyebrow">Character Sheet · Concert Cellist</span>
+      <h1 class="name-en">Han <em>Seo-rin</em></h1>
+      <div class="name-kr">한서린 <small>韓瑞潾</small></div>
+      <p class="lede">고요한 무대 위에서 깊은 음색으로 말하는 첼리스트. 에메랄드 드레스와 오래된 이탈리아 첼로가 그의 상징입니다.</p>
+      <dl class="facts">
+        <div><dt>나이</dt><dd>27세</dd></div>
+        <div><dt>포지션</dt><dd>솔로 · 실내악</dd></div>
+        <div><dt>악기</dt><dd>1740년대 이탈리아 첼로</dd></div>
+      </dl>
+      <p class="notice">레퍼런스 사진 3장의 스타일, 의상, 포즈, 조명을 분석해 만든 가상 인물입니다. 얼굴은 레퍼런스 인물과 닮지 않도록 따로 설계했습니다.</p>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="block" id="analysis">
+    <div class="wrap">
+      <div class="block-head">
+        <span class="label">Reference Analysis</span>
+        <h2>레퍼런스 분석</h2>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col"></th>
+              <th scope="col"><span class="ref-tag">A</span>그린 원숄더</th>
+              <th scope="col"><span class="ref-tag">B</span>아이스 블루</th>
+              <th scope="col"><span class="ref-tag">C</span>네이비 레이스</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">의상</th><td>에메랄드 그린 새틴 원숄더 롱드레스</td><td>아이스 블루 스트랩리스 드레스, 블랙 벨벳 허리 리본</td><td>네이비 레이스 슬립 드레스, 얇은 끈</td></tr>
+            <tr><th scope="row">헤어</th><td>로우 업스타일, 잔머리 몇 가닥</td><td>허리까지 오는 스트레이트 흑발, 가운데 가르마</td><td>가슴 아래 길이의 굵은 웨이브</td></tr>
+            <tr><th scope="row">표정</th><td>밝고 따뜻한 미소, 고개를 살짝 기울임</td><td>무표정에 가까운 고요한 정면 시선</td><td>화사한 미소, 정면</td></tr>
+            <tr><th scope="row">포즈</th><td>앉아서 첼로를 세우고 넥을 손으로 감쌈</td><td>서서 첼로를 옆에 세움, 스크롤이 얼굴 높이</td><td>첼로를 가로로 눕혀 그 위에 팔을 포갬</td></tr>
+            <tr><th scope="row">배경</th><td>미드 그레이 심리스</td><td>다크 차콜 심리스</td><td>밝은 웜 베이지</td></tr>
+            <tr><th scope="row">조명</th><td>소프트 키라이트, 은은한 그라데이션</td><td>정면 소프트 라이트, 어두운 배경과 대비</td><td>하이키, 그림자 거의 없음</td></tr>
+            <tr><th scope="row">분위기</th><td>우아함과 친근함</td><td>신비로움, 고전적 절제미</td><td>화사함, 친밀감</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="takes">
+        <div class="take"><h3><span class="ref-tag">A</span>에서 가져온 것</h3><p>딥 에메랄드 시그니처 컬러, 원숄더 실루엣, 넥을 쥐는 포즈</p></div>
+        <div class="take"><h3><span class="ref-tag">B</span>에서 가져온 것</h3><p>긴 흑발의 고급스러움, 어두운 배경 대비, 정적인 카리스마</p></div>
+        <div class="take"><h3><span class="ref-tag">C</span>에서 가져온 것</h3><p>웨이브 헤어의 부드러움, 첼로를 안는 포즈, 하이키 조명의 화사함</p></div>
+      </div>
+
+      <div class="shared">
+        <span class="label">세 장의 공통점 · 모든 컷에 유지</span>
+        <div class="chips">
+          <span class="chip">적갈색 바니시의 오래된 첼로</span>
+          <span class="chip">어깨·쇄골이 드러나는 이브닝 드레스</span>
+          <span class="chip">단색 심리스 배경</span>
+          <span class="chip">소프트박스 조명</span>
+          <span class="chip">세로 2:3 프레임</span>
+          <span class="chip">맑은 피부 + MLBB 립</span>
+          <span class="chip">미니멀 액세서리</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="profile">
+    <div class="wrap profile-grid">
+      <div>
+        <div class="block-head">
+          <span class="label">Profile</span>
+          <h2>캐릭터 프로필</h2>
+        </div>
+        <dl class="kv">
+          <div><dt>이름</dt><dd>한서린 (Han Seo-rin)</dd></div>
+          <div><dt>나이</dt><dd>27세</dd></div>
+          <div><dt>직업</dt><dd>솔로 첼리스트, 실내악 트리오 멤버</dd></div>
+          <div><dt>학력</dt><dd>서울 예고, 국내 음대, 독일 최고연주자 과정</dd></div>
+          <div><dt>악기</dt><dd>1740년대 이탈리아 제작 추정 첼로, 재단 대여</dd></div>
+          <div><dt>레퍼토리</dt><dd>드보르자크 첼로 협주곡 B단조, 바흐 무반주 첼로 모음곡, 라흐마니노프 첼로 소나타 G단조</dd></div>
+          <div><dt>성격</dt><dd>무대 위에서는 고요하고 집중력 있는 카리스마, 무대 밖에서는 웃음이 많고 다정함</dd></div>
+        </dl>
+        <p class="quote">고요한 열정 · 깊은 음색 · 에메랄드</p>
+      </div>
+
+      <div>
+        <div class="block-head">
+          <span class="label">Visual Design</span>
+          <h2>외모 설계</h2>
+        </div>
+        <div class="visual">
+          <div class="mark-callout">
+            <span class="mark-dot" aria-hidden="true"></span>
+            <div><h3>왼쪽 눈 밑 눈물점</h3><p>모든 컷에 넣는 시그니처 포인트. 같은 사람으로 알아보게 하는 식별 요소입니다.</p></div>
+          </div>
+          <div class="visual-item"><h3>얼굴</h3><p>부드러운 계란형, 날카롭지 않은 턱선. 속쌍꺼풀 아몬드형 눈에 짙은 갈색 눈동자. 곧고 작은 콧날, 도톰한 입술.</p></div>
+          <div class="visual-item"><h3>헤어</h3><p>기본은 허리 위 길이의 흑갈색 롱헤어에 끝만 굵은 웨이브. 무대에서는 로우 시뇽에 잔머리 몇 가닥.</p></div>
+          <div class="visual-item"><h3>피부 · 메이크업</h3><p>밝은 웜톤, 새틴 광택, 실제 피부결과 모공 표현. 더스티 로즈 립, 브라운 섀도, 얇은 아이라인.</p></div>
+          <div class="visual-item"><h3>체형 · 액세서리</h3><p>165cm 내외, 가늘고 긴 목과 손가락. 작은 진주 드롭 이어링 하나만.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="looks">
+    <div class="wrap">
+      <div class="block-head">
+        <span class="label">Wardrobe</span>
+        <h2>의상 라인업</h2>
+      </div>
+      <div class="looks">
+        <article class="look">
+          <div class="swatch" style="background: radial-gradient(circle at 50% 35%, #8C928F, #5E6461)">
+            <span class="tag">SIGNATURE</span>
+            <div class="gown" style="background: linear-gradient(110deg, #0A4A39, #13785C 45%, #0A3D2F)"></div>
+          </div>
+          <div class="look-title"><b>S1</b>Emerald Nocturne</div>
+          <p>딥 에메랄드 실크 새틴 원숄더 드레스. 바이어스 컷으로 흐르듯 떨어지는 실루엣.</p>
+          <div class="light">미드 그레이 배경 · 소프트 키 + 약한 림라이트</div>
+        </article>
+        <article class="look">
+          <div class="swatch" style="background: radial-gradient(circle at 50% 35%, #3A3D3F, #1C1E20)">
+            <div class="gown" style="background: linear-gradient(110deg, #A9BFD0, #D3E1EB 45%, #9FB4C4); border-bottom: 0"></div>
+          </div>
+          <div class="look-title"><b>S2</b>Moonlit Ice</div>
+          <p>페일 아이스 블루 스트랩리스 타프타 드레스에 블랙 벨벳 리본 벨트.</p>
+          <div class="light">다크 차콜 배경 · 정면 소프트 라이트</div>
+        </article>
+        <article class="look">
+          <div class="swatch" style="background: radial-gradient(circle at 50% 35%, #F3ECE1, #DCD1C1)">
+            <div class="gown" style="background: linear-gradient(110deg, #141C33, #26345A 45%, #121A2E)"></div>
+          </div>
+          <div class="look-title"><b>S3</b>Midnight Lace</div>
+          <p>미드나잇 네이비 레이스 슬립 드레스. 얇은 끈으로 어깨 라인을 살림.</p>
+          <div class="light">아이보리 배경 · 하이키 조명</div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="prompts">
+    <div class="wrap">
+      <div class="block-head">
+        <span class="label">Image Prompts</span>
+        <h2>이미지 생성 프롬프트</h2>
+        <p>컷을 고르고 복사해서 이미지 생성 툴에 붙여넣으세요. 캐릭터와 첼로 묘사 블록이 이미 들어 있습니다. 이미지 모델은 영어에서 결과가 안정적이라 원문은 영어입니다.</p>
+      </div>
+      <div class="tabs" role="tablist" id="tabs" aria-label="컷 선택"></div>
+      <div class="prompt-card" role="tabpanel" id="panel">
+        <div class="prompt-top">
+          <p id="cut-desc"></p>
+          <button class="copy" id="copy-prompt" type="button">프롬프트 복사</button>
+        </div>
+        <pre class="prompt" id="prompt-text"></pre>
+        <p class="legend">초록 밑줄 부분은 <mark>캐릭터</mark>와 <mark>첼로</mark> 공통 블록입니다. 모든 컷에서 똑같이 유지하세요.</p>
+      </div>
+
+      <div class="prompt-card neg">
+        <div class="prompt-top">
+          <p>네거티브 프롬프트 (SDXL 등). Flux는 지원하지 않으니 생략하세요.</p>
+          <button class="copy" id="copy-neg" type="button">네거티브 복사</button>
+        </div>
+        <pre class="prompt" id="neg-text"></pre>
+      </div>
+
+      <div class="block-head" style="margin-top: 48px">
+        <h3>툴별 권장 세팅</h3>
+      </div>
+      <div class="table-scroll">
+        <table class="tools">
+          <thead><tr><th scope="col">툴</th><th scope="col">세팅</th></tr></thead>
+          <tbody>
+            <tr><td>Midjourney v7</td><td><code>--ar 2:3 --style raw --stylize 150</code>. 기준 얼굴을 정한 뒤에는 <code>--oref &lt;기준 이미지 URL&gt; --ow 100</code> 추가</td></tr>
+            <tr><td>Flux.1 dev / pro</td><td>896×1344, guidance 3.0~3.5, steps 28~40</td></tr>
+            <tr><td>SDXL 실사 모델</td><td>RealVisXL, Juggernaut XL 등. 832×1216, CFG 4~6, DPM++ 2M Karras, 30~40 steps, ADetailer로 얼굴·손 보정</td></tr>
+            <tr><td>ChatGPT / Gemini</td><td>복사한 프롬프트를 그대로 붙여넣고 "세로 2:3 비율"이라고 덧붙이기</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="consistency">
+    <div class="wrap">
+      <div class="block-head">
+        <span class="label">Consistency</span>
+        <h2>같은 얼굴로 여러 컷 만들기</h2>
+      </div>
+      <ol class="steps">
+        <li><div><strong>대표 컷부터 확정합니다.</strong> S1 Emerald Nocturne 프롬프트로 여러 장 생성하고 가장 마음에 드는 얼굴 1장을 기준 얼굴로 고릅니다.</div></li>
+        <li><div><strong>기준 얼굴을 참조로 넣습니다.</strong> 나머지 컷은 그 생성 이미지를 캐릭터 참조로 사용합니다. Midjourney는 <code>--oref</code>, Flux·SDXL은 IP-Adapter FaceID, 더 정확하게 하려면 기준 이미지 20~30장으로 LoRA를 학습합니다.</div></li>
+        <li><div><strong>고정 요소를 지킵니다.</strong> 눈물점, 헤어 길이, 진주 이어링은 모든 프롬프트에 그대로 둡니다.</div></li>
+        <li><div><strong>손과 악기를 보정합니다.</strong> 손가락이 뭉개지면 해당 부위만 인페인팅하고, 첼로 줄 4개와 대칭 f홀을 확인합니다. 활은 실패율이 높아 프로필 컷에서는 빼는 편이 안정적입니다.</div></li>
+      </ol>
+      <div class="warn">
+        <h3>레퍼런스 사진 사용 시 주의</h3>
+        <p>레퍼런스 속 실존 인물의 사진을 얼굴 참조로 넣으면 특정인과 닮은 이미지가 나와 초상권 문제가 생길 수 있습니다. 스타일과 구도 참고용으로만 쓰세요. SNS에 올릴 때는 AI로 만든 가상 인물이라고 표기하는 것을 권장합니다.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">한서린 캐릭터 시트 · 가상 인물 설정 자료</div>
+</footer>
+
+<script>
+(function () {
+  var CHARACTER = "a beautiful 27-year-old Korean woman, professional concert cellist, soft oval face with a gentle jawline, almond-shaped dark brown eyes with subtle inner double eyelids, small straight nose, full lips with dusty rose MLBB lipstick, a tiny beauty mark just under her left eye, luminous warm-toned skin with natural texture and fine pores, satin-finish glow, long dark brown-black hair reaching her waist with soft loose waves at the ends, small pearl drop earrings, slender long neck and graceful long fingers";
+  var CELLO = "an antique 18th-century Italian cello with deep amber-red varnish, worn varnish on the lower bout, visible flamed maple grain, ebony fingerboard, black tailpiece";
+  var NEG = "cartoon, anime, illustration, 3d render, cgi, doll-like, plastic skin, airbrushed, over-smoothed skin, uncanny, deformed hands, extra fingers, missing fingers, fused fingers, extra strings, broken cello, wrong f-holes, bow merged with body, asymmetrical eyes, heavy makeup, oversaturated, harsh shadows, watermark, text, logo, low resolution, blurry";
+
+  var CUTS = [
+    { id: "s1", name: "S1 대표 컷", desc: "기준 얼굴을 정하는 컷. 에메랄드 원숄더, 앉은 자세, 따뜻한 미소.",
+      t: "Photorealistic studio portrait of [CHARACTER], wearing a deep emerald green silk satin one-shoulder evening gown with a fluid bias cut, seated on a hidden stool, holding [CELLO] upright beside her, her right hand gently wrapped around the cello neck near the scroll, head slightly tilted, warm gentle smile, looking at the camera, seamless medium gray backdrop with a subtle radial gradient, large softbox key light from camera left, soft fill, faint rim light on hair and shoulder, classical music concert profile photo, shot on Canon EOS R5, 85mm f/1.8, ISO 100, knee-up framing, shallow depth of field, ultra detailed, 8k, natural color grading" },
+    { id: "s2", name: "S2 다크 배경", desc: "아이스 블루 드레스, 차콜 배경, 고요한 시선.",
+      t: "Photorealistic studio portrait of [CHARACTER], hair worn straight and sleek with a center part, wearing a pale ice blue strapless taffeta gown with a sculpted neckline and a thin black velvet ribbon belt, standing beside [CELLO], the scroll at the height of her face, both hands resting on the upper bout, serene composed expression, calm direct gaze, lips closed, seamless dark charcoal backdrop, soft frontal beauty light, gentle falloff into darkness, elegant and mysterious mood, shot on Sony A7R V, 85mm f/1.4, waist-up framing, ultra realistic skin texture, 8k" },
+    { id: "s3", name: "S3 하이키", desc: "네이비 레이스, 첼로를 가로로 안은 포즈, 밝은 미소.",
+      t: "Photorealistic studio portrait of [CHARACTER], voluminous soft waves, wearing a midnight navy lace slip dress with thin straps, holding [CELLO] horizontally across her body, forearms resting crossed on top of the cello's upper bout, bright radiant smile showing a hint of teeth, looking at the camera, seamless ivory warm beige backdrop, high-key lighting, very soft shadows, fresh and luminous mood, shot on Canon EOS R5, 70mm f/2.8, waist-up framing, ultra detailed, 8k" },
+    { id: "stage", name: "무대 연주", desc: "콘서트홀 무대에서 눈을 감고 연주하는 장면.",
+      t: "Photorealistic photo of [CHARACTER], hair in a low chignon with a few loose face-framing strands, wearing a deep emerald green silk one-shoulder gown, performing [CELLO] on stage in a grand wooden concert hall, bow on the A string, eyes closed, deeply immersed expression, correct cello playing posture, cello endpin on the floor, warm golden stage spotlight from above, dark audience seats softly blurred, captured mid-performance, shot on Sony A1, 135mm f/2, cinematic, ultra realistic, 8k" },
+    { id: "close", name: "뷰티 클로즈업", desc: "스크롤에 볼을 기댄 얼굴 클로즈업. 눈물점이 잘 보이는 컷.",
+      t: "Extreme close-up beauty portrait of [CHARACTER], hair in a low chignon, cheek resting lightly against the scroll of [CELLO], soft half smile, eyes looking just past the camera, Rembrandt soft lighting, dark gray background, visible skin texture, catchlights in eyes, beauty mark under left eye clearly visible, shot on Canon EOS R5, 100mm macro f/2.8, ultra detailed, 8k" }
+  ];
+
+  function esc(s) { return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+  function plain(t) { return t.replace("[CHARACTER]", CHARACTER).replace("[CELLO]", CELLO); }
+  function marked(t) {
+    return esc(t).replace("[CHARACTER]", "<mark>" + esc(CHARACTER) + "</mark>").replace("[CELLO]", "<mark>" + esc(CELLO) + "</mark>");
+  }
+
+  var tabs = document.getElementById("tabs");
+  var out = document.getElementById("prompt-text");
+  var desc = document.getElementById("cut-desc");
+  var current = CUTS[0];
+
+  function select(cut, focus) {
+    current = cut;
+    Array.prototype.forEach.call(tabs.children, function (b) {
+      var on = b.dataset.id === cut.id;
+      b.setAttribute("aria-selected", on ? "true" : "false");
+      b.tabIndex = on ? 0 : -1;
+      if (on && focus) b.focus();
+    });
+    out.innerHTML = marked(cut.t);
+    desc.textContent = cut.desc;
+    try { localStorage.setItem("seorin-cut", cut.id); } catch (e) {}
+  }
+
+  CUTS.forEach(function (c, i) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "tab";
+    b.id = "tab-" + c.id;
+    b.setAttribute("role", "tab");
+    b.setAttribute("aria-controls", "panel");
+    b.dataset.id = c.id;
+    b.textContent = c.name;
+    b.addEventListener("click", function () { select(c); });
+    b.addEventListener("keydown", function (e) {
+      if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+      e.preventDefault();
+      var n = (i + (e.key === "ArrowRight" ? 1 : CUTS.length - 1)) % CUTS.length;
+      select(CUTS[n], true);
+    });
+    tabs.appendChild(b);
+  });
+
+  var saved = null;
+  try { saved = localStorage.getItem("seorin-cut"); } catch (e) {}
+  select(CUTS.filter(function (c) { return c.id === saved; })[0] || CUTS[0]);
+
+  document.getElementById("neg-text").textContent = NEG;
+
+  function copy(btn, text, pre, label) {
+    function done() {
+      btn.textContent = "복사됨";
+      btn.classList.add("done");
+      setTimeout(function () { btn.textContent = label; btn.classList.remove("done"); }, 1600);
+    }
+    function fallback() {
+      var r = document.createRange();
+      r.selectNodeContents(pre);
+      var s = window.getSelection();
+      s.removeAllRanges();
+      s.addRange(r);
+      btn.textContent = "선택됨, 직접 복사하세요";
+      setTimeout(function () { btn.textContent = label; }, 2400);
+    }
+    try {
+      navigator.clipboard.writeText(text).then(done, fallback);
+    } catch (e) { fallback(); }
+  }
+
+  document.getElementById("copy-prompt").addEventListener("click", function () {
+    copy(this, plain(current.t), out, "프롬프트 복사");
+  });
+  document.getElementById("copy-neg").addEventListener("click", function () {
+    copy(this, NEG, document.getElementById("neg-text"), "네거티브 복사");
+  });
+})();
+</script>
