@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>비트코인 시황 10월 23일</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --page: #f3f4f6;
+    --card: #ffffff;
+    --ink: #222222;
+    --sub: #666666;
+    --line: #e5e5e5;
+    --accent: #1f9d55;
+    --accent-soft: #eaf7ef;
+    --up: #d93025;
+    --down: #1a73e8;
+    --warn-soft: #fff7e0;
+    --quote: #f7f7f7;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--page);
+    color: var(--ink);
+    font-family: "Nanum Gothic", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    line-height: 1.85;
+    font-size: 16px;
+    word-break: keep-all;
+  }
+  .toolbar {
+    position: sticky; top: 0; z-index: 10;
+    display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;
+    padding: 10px 16px;
+    background: rgba(243,244,246,.92);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--line);
+  }
+  .toolbar button {
+    font: inherit; font-size: 14px; font-weight: 700;
+    padding: 8px 14px; border-radius: 8px; cursor: pointer;
+    border: 1px solid var(--accent); background: var(--card); color: var(--accent);
+  }
+  .toolbar button.primary { background: var(--accent); color: #fff; }
+  .toolbar .msg { font-size: 13px; color: var(--sub); align-self: center; min-width: 80px; }
+  .wrap { max-width: 760px; margin: 24px auto 64px; padding: 0 16px; }
+  article {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 40px 36px 48px;
+  }
+  @media (max-width: 600px) { article { padding: 28px 18px 36px; } }
+
+  .category { font-size: 13px; color: var(--accent); font-weight: 700; }
+  h1 { font-size: 26px; line-height: 1.45; margin: 6px 0 12px; font-weight: 800; }
+  .meta { font-size: 13px; color: var(--sub); padding-bottom: 20px; border-bottom: 1px solid var(--line); margin-bottom: 32px; }
+
+  .center { text-align: center; }
+  p { margin: 0 0 18px; }
+  h2 {
+    font-size: 21px; font-weight: 800; margin: 52px 0 18px;
+    padding: 0 0 8px; border-bottom: 2px solid var(--ink);
+  }
+  h3 { font-size: 17px; font-weight: 800; margin: 30px 0 10px; color: var(--accent); }
+  hr.dots { border: 0; text-align: center; margin: 44px 0; }
+  hr.dots::after { content: "· · ·"; color: #bbb; letter-spacing: 8px; font-size: 20px; }
+
+  .quote {
+    background: var(--quote); border-left: 4px solid var(--accent);
+    padding: 16px 20px; margin: 20px 0 24px; border-radius: 0 6px 6px 0;
+  }
+  .quote p:last-child { margin: 0; }
+  .callout {
+    background: var(--accent-soft); border-radius: 10px; padding: 18px 22px; margin: 20px 0 26px;
+  }
+  .callout.warn { background: var(--warn-soft); }
+  .callout ul, .callout ol { margin: 0; padding-left: 20px; }
+  .callout li { margin: 4px 0; }
+
+  table { width: 100%; border-collapse: collapse; margin: 16px 0 26px; font-size: 15px; }
+  th, td { border: 1px solid var(--line); padding: 10px 12px; text-align: left; vertical-align: top; }
+  th { background: #fafafa; font-weight: 700; white-space: nowrap; }
+  td.num { font-variant-numeric: tabular-nums; }
+  .up { color: var(--up); font-weight: 700; }
+  .down { color: var(--down); font-weight: 700; }
+  b, strong { font-weight: 800; }
+  .hl { background: linear-gradient(transparent 60%, #ffe58a 60%); }
+
+  /* timeline */
+  .timeline { list-style: none; padding: 0; margin: 18px 0 26px; border-left: 2px solid var(--line); }
+  .timeline li { position: relative; padding: 0 0 16px 22px; }
+  .timeline li::before {
+    content: ""; position: absolute; left: -7px; top: 9px;
+    width: 12px; height: 12px; border-radius: 50%; background: var(--card); border: 2px solid var(--accent);
+  }
+  .timeline li.now::before { background: var(--accent); }
+  .timeline .when { font-weight: 800; }
+
+  /* level ladder */
+  .ladder { margin: 18px 0 26px; border: 1px solid var(--line); border-radius: 10px; overflow: hidden; font-size: 15px; }
+  .ladder .row { display: grid; grid-template-columns: 118px 1fr; border-top: 1px solid var(--line); }
+  .ladder .row:first-child { border-top: 0; }
+  .ladder .price { padding: 10px 12px; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .ladder .desc { padding: 10px 12px; }
+  .ladder .res .price { color: var(--up); }
+  .ladder .sup .price { color: var(--down); }
+  .ladder .cur { background: var(--accent-soft); }
+  .ladder .cur .price { color: var(--accent); }
+
+  .scenario { border: 1px solid var(--line); border-radius: 10px; padding: 16px 20px; margin: 14px 0; }
+  .scenario .tag { display: inline-block; font-weight: 800; margin-bottom: 6px; }
+  .scenario p { margin: 0 0 6px; }
+  .scenario p:last-child { margin: 0; }
+
+  .summary { border: 2px solid var(--ink); border-radius: 10px; padding: 20px 24px; margin: 20px 0; }
+  .summary ol { margin: 0; padding-left: 20px; }
+  .summary li { margin: 6px 0; }
+
+  .sources { font-size: 13px; color: var(--sub); }
+  .sources a { color: var(--sub); }
+  .sources ul { padding-left: 18px; margin: 8px 0 0; }
+  .tags { margin-top: 32px; color: var(--accent); font-size: 14px; line-height: 2; }
+  .disclaimer { font-size: 13px; color: var(--sub); background: #fafafa; padding: 14px 16px; border-radius: 6px; margin-top: 28px; }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <button class="primary" id="copyRich" type="button">본문 서식 복사</button>
+  <button id="copyText" type="button">텍스트만 복사</button>
+  <span class="msg" id="msg" aria-live="polite"></span>
+</div>
+
+<div class="wrap">
+<article id="post">
+
+  <div class="category">코인 시황 · 비트코인</div>
+  <h1>[비트코인 시황] 8만 달러 공방전! 10월 23일 비트코인 현황 총정리 (ETF · 금리 · 환율 · 전망)</h1>
+  <div class="meta">2026. 10. 23. · 10월 23일 오후 기준 자료</div>
+
+  <p class="center">안녕하세요, 이웃님들 😊<br>
+  오늘은 <b>2026년 10월 23일 기준 비트코인 현황</b>을 정리해 볼게요.</p>
+
+  <p class="center">이번 주 비트코인 현물 ETF에는 사흘 만에 <b>1조 4천억 원</b>이 넘는 돈이 들어왔어요.<br>
+  그런데 하루 만에 다시 <b>3% 넘게 빠지면서</b><br>
+  지금은 <span class="hl">8만 달러 지지선</span>을 다시 시험하고 있는데요.</p>
+
+  <p class="center">무슨 일이 있었는지, 앞으로 어디를 봐야 하는지<br>
+  차근차근 짚어 보겠습니다 👇</p>
+
+  <div class="callout">
+    <b>📌 목차</b>
+    <ol>
+      <li>오늘의 비트코인 시세</li>
+      <li>올해 흐름 한눈에 보기</li>
+      <li>이번 주 핵심 이슈 4가지</li>
+      <li>국내 시장 체크 (김프 · 환율)</li>
+      <li>기술적 분석: 지지선 · 저항선</li>
+      <li>앞으로의 시나리오</li>
+      <li>3줄 요약</li>
+    </ol>
+  </div>
+
+  <hr class="dots">
+
+  <h2>1. 오늘의 비트코인 시세 💰</h2>
+
+  <table>
+    <tr><th>구분</th><th>내용</th></tr>
+    <tr><td>달러 시세</td><td class="num"><b>약 81,400달러</b> <span class="down">(24시간 -3.3%)</span></td></tr>
+    <tr><td>24시간 고가 / 저가</td><td class="num">84,306달러 / 80,989달러</td></tr>
+    <tr><td>원화 시세 (업비트)</td><td class="num"><b>약 1억 947만 원</b> <span class="down">(전일 대비 -2.24%, 23일 0시)</span></td></tr>
+    <tr><td>시가총액</td><td class="num">약 1.64조 달러 (약 2,170조 원)</td></tr>
+    <tr><td>사상 최고가 대비</td><td class="num"><span class="down">약 -35%</span> (최고가 약 126,000달러, 2025년 10월 6일)</td></tr>
+    <tr><td>공포·탐욕 지수</td><td class="num"><b>50 (중립)</b>, 하루 새 18포인트 하락</td></tr>
+  </table>
+
+  <div class="quote">
+    <p>💬 한 줄 정리<br>
+    <b>“8만~8만 5천 달러 박스권 안에서 다시 아래쪽으로 내려온 상태”</b>예요.<br>
+    지난주부터 이 구간을 벗어나지 못하고 위아래로 움직이고 있습니다.</p>
+  </div>
+
+  <hr class="dots">
+
+  <h2>2. 올해 흐름 한눈에 보기 📉📈</h2>
+
+  <p>지금 가격이 비싼 건지 싼 건지 판단하려면 큰 흐름부터 보는 게 좋아요.</p>
+
+  <ul class="timeline">
+    <li><span class="when">2025년 10월 6일</span><br>사상 최고가 <b>약 12만 6천 달러</b> 기록 🚀</li>
+    <li><span class="when">2025년 4분기 ~ 2026년 상반기</span><br>긴 조정 구간. 6월 초에는 6만 달러가 깨지기도 했어요.</li>
+    <li><span class="when">2026년 6월 말 ~ 7월 초</span><br>연중 최저점 <b>약 57,800달러</b>. 고점 대비 <span class="down">-54%</span></li>
+    <li><span class="when">2026년 8월</span><br>6만 3천~6만 5천 달러 사이에서 바닥 다지기</li>
+    <li><span class="when">2026년 9~10월</span><br>8만 달러대 회복. 저점 대비 <span class="up">약 +40%</span> 반등</li>
+    <li class="now"><span class="when">현재 (10월 23일)</span><br>8만~8만 5천 달러 박스권 하단, <b>약 81,400달러</b></li>
+  </ul>
+
+  <p>재미있는 점은 이번 하락폭(-54%)이 <b>과거 사이클 중 가장 얕았다</b>는 거예요.<br>
+  2018년(약 -84%), 2022년(약 -77%) 약세장과 비교하면 훨씬 완만하죠.<br>
+  현물 ETF와 기업 매수 같은 <b>기관 수요가 바닥을 받쳐준 덕분</b>이라는 분석이 많습니다.</p>
+
+  <hr class="dots">
+
+  <h2>3. 이번 주 핵심 이슈 4가지 🔍</h2>
+
+  <h3>① ETF 자금: “나갔다가 돌아왔다”</h3>
+
+  <p>10월 초에는 미국 현물 비트코인 ETF에서 돈이 꽤 많이 빠져나갔어요.</p>
+
+  <table>
+    <tr><th>기간</th><th>순유출입</th><th>비고</th></tr>
+    <tr><td>10월 5~9일</td><td class="num down">약 -6억 7,900만 달러</td><td>7일 하루에만 약 -4억 8,500만 달러</td></tr>
+    <tr><td>10월 12~16일</td><td class="num down">약 -1억 5천만 ~ -2억 3천만 달러</td><td>집계처마다 차이 있음</td></tr>
+    <tr><td>10월 19일 (월)</td><td class="num up">+5억 2,700만 달러</td><td>블랙록 IBIT 하루 +6억 6,500만 달러</td></tr>
+    <tr><td>10월 20일 (화)</td><td class="num up">+2,300만 달러</td><td></td></tr>
+    <tr><td>10월 21일 (수)</td><td class="num up">+5억 2,500만 달러</td><td></td></tr>
+  </table>
+
+  <p>이번 주 사흘 동안 들어온 돈만 <b>약 10억 7,500만 달러(약 1조 4천억 원)</b>예요.<br>
+  특히 블랙록 IBIT의 하루 유입액 6억 6,500만 달러는 <b>2025년 10월 이후 최대치</b>였습니다.</p>
+
+  <div class="quote">
+    <p>🤔 그런데 왜 가격은 빠졌을까요?<br>
+    ETF로 큰돈이 들어왔는데도 22일 가격은 오히려 떨어졌어요.<br>
+    <b>ETF 수급만으로는 아래에서 설명할 거시경제 역풍을 이기기 어렵다</b>는 뜻이에요.</p>
+  </div>
+
+  <h3>② 거시경제: 금리 · 유가 · 국채, 삼중 압박</h3>
+
+  <p>지금 비트코인을 가장 크게 흔드는 건 사실 코인 바깥의 이야기예요.</p>
+
+  <ul>
+    <li><b>미국 기준금리 인상</b>: 연준(Fed)이 9월에 금리를 <b>3.75~4.00%</b>로 올렸어요. 다음 회의(FOMC)는 <b>10월 27~28일</b>이에요.</li>
+    <li><b>유가 급등</b>: 이란 분쟁 여파로 브렌트유가 <b>배럴당 약 112달러</b>까지 올랐어요. 물가 부담이 커지는 거죠.</li>
+    <li><b>미국 10년물 국채금리 5.04%</b>: 안전자산 금리가 5%를 넘으니 위험자산의 매력이 떨어져요.</li>
+    <li><b>탄탄한 고용지표</b>: 미국 실업수당 청구 건수가 57년 만에 최저 수준이에요. 경기가 강하다는 뜻이라 오히려 <b>추가 인상 우려</b>를 키웠어요.</li>
+  </ul>
+
+  <p>22일 나스닥이 <b>-2.55%</b> 빠지는 동안 비트코인은 <b>약 -3.9%</b> 하락했어요.<br>
+  요즘 비트코인은 ‘디지털 금’보다는 <span class="hl">변동성 큰 기술주</span>처럼 움직이고 있다는 해석이 나오는 이유예요.</p>
+
+  <h3>③ 투자심리: 탐욕 → 중립</h3>
+
+  <p>공포·탐욕 지수는 10월 초 80 안팎(탐욕)에서 내려와 <b>23일 50(중립)</b>까지 떨어졌어요. 하루 만에 18포인트나 빠졌죠.<br>
+  아직 ‘공포’ 구간은 아니지만, 단기 과열이 빠르게 식고 있어요.</p>
+
+  <h3>④ 큰손들의 움직임: 기업은 속도 조절, 채굴자는 부담</h3>
+
+  <ul>
+    <li><b>스트래티지(구 마이크로스트래티지)</b>: 10월 18일 기준 <b>848,517 BTC</b>를 보유하고 있어요. 평균 매입가는 <b>75,446달러</b>예요. 다만 최근 주간 매수량이 250~267 BTC로 올해 들어 가장 적은 수준까지 줄었어요.</li>
+    <li><b>채굴자</b>: 해시프라이스(채굴 수익성)가 하루 1PH당 약 40달러 수준이에요. 금리 인상으로 대출 이자 부담까지 커지면서 <b>보유 물량을 팔아야 하는 압력</b>이 있다는 분석이 나와요.</li>
+  </ul>
+
+  <hr class="dots">
+
+  <h2>4. 국내 시장 체크 🇰🇷</h2>
+
+  <table>
+    <tr><th>항목</th><th>수치</th><th>의미</th></tr>
+    <tr><td>김치 프리미엄</td><td class="num"><b>0.85%</b></td><td>업비트 1억 947만 원 vs 바이낸스 1억 855만 원. 1% 미만이라 국내 과열 신호는 없어요.</td></tr>
+    <tr><td>원/달러 환율</td><td class="num"><b>1,324.2원</b></td><td>22일 종가 기준 올해 최저예요. 원화 강세라 원화로 본 코인 가격은 달러 가격보다 덜 올라요.</td></tr>
+    <tr><td>한국 기준금리</td><td class="num">3.00% 동결</td><td>국내 금리 변수는 당분간 중립이에요.</td></tr>
+  </table>
+
+  <div class="quote">
+    <p>💡 원화 투자자 체크 포인트<br>
+    환율이 계속 떨어지면(원화 강세) 달러 기준으로 비트코인이 올라도 <b>원화 수익률은 그만큼 깎여요.</b><br>
+    업비트·빗썸 가격만 볼 게 아니라 <b>달러 시세와 환율을 같이 보는 습관</b>이 필요해요.</p>
+  </div>
+
+  <hr class="dots">
+
+  <h2>5. 기술적 분석: 지지선 · 저항선 📊</h2>
+
+  <p>차트로 보면 지금 구간은 이렇게 정리돼요.</p>
+
+  <div class="ladder" role="table" aria-label="비트코인 주요 가격대">
+    <div class="row res"><div class="price">90,000</div><div class="desc">심리적 저항선</div></div>
+    <div class="row res"><div class="price">86,500~87,500</div><div class="desc"><b>핵심 저항대.</b> 장기 보유자 평단과 레버리지 청산 물량이 몰려 있어요 (글래스노드).</div></div>
+    <div class="row res"><div class="price">85,000</div><div class="desc">이번 주 돌파에 실패한 박스권 상단</div></div>
+    <div class="row res"><div class="price">83,100</div><div class="desc">1차 저항</div></div>
+    <div class="row cur"><div class="price">≈ 81,400</div><div class="desc"><b>현재가</b></div></div>
+    <div class="row sup"><div class="price">81,500</div><div class="desc">10월 15일 저점에서 이어지는 상승 추세선 (현재 테스트 중)</div></div>
+    <div class="row sup"><div class="price">80,000</div><div class="desc"><b>핵심 지지선.</b> 현물 ETF 투자자와 기업들의 평균 매수가가 모이는 자리예요.</div></div>
+    <div class="row sup"><div class="price">75,400~76,200</div><div class="desc">8만 달러가 깨질 경우 다음 지지 구간. 스트래티지 평단(75,446달러)과도 겹쳐요.</div></div>
+  </div>
+
+  <p>보조지표를 보면 가격이 <b>50일 이동평균선 아래로 내려왔고</b>, RSI는 중립 구간이에요.<br>
+  단기 추세는 약해졌지만 과매도 신호까지는 아닌 상태예요.</p>
+
+  <hr class="dots">
+
+  <h2>6. 앞으로의 시나리오 🔮</h2>
+
+  <p>가장 중요한 이벤트는 <b>다음 주 FOMC(10월 27~28일)</b>예요.<br>
+  그 결과에 따라 세 가지 시나리오를 생각해 볼 수 있어요.</p>
+
+  <div class="scenario">
+    <span class="tag">🟢 강세 시나리오</span>
+    <p><b>85,000달러 돌파 후 안착</b>하면 → 86,500~87,500 → 90,000달러 도전</p>
+    <p>조건: FOMC에서 추가 인상 신호가 약하고, 유가가 진정되고, ETF 유입이 이어질 때</p>
+  </div>
+
+  <div class="scenario">
+    <span class="tag">🟡 기본 시나리오</span>
+    <p><b>80,000~85,000달러 박스권 유지</b></p>
+    <p>FOMC 결과를 확인하기 전까지는 방향성 없이 오르내릴 가능성이 높아요.</p>
+  </div>
+
+  <div class="scenario">
+    <span class="tag">🔴 약세 시나리오</span>
+    <p><b>80,000달러 이탈</b>하면 → 75,000~76,000달러 구간까지 밀릴 수 있어요.</p>
+    <p>조건: 매파적인 FOMC, 미 국채금리 5%대 지속, 기술주 추가 급락</p>
+  </div>
+
+  <p>참고로 기관 전망 중에는 TD코웬이 <b>연말 약 10만 9천 달러</b>를 제시하기도 했어요.<br>
+  다만 이런 전망은 금리와 유가 같은 변수에 따라 얼마든지 바뀔 수 있으니 참고만 하시는 게 좋아요.</p>
+
+  <div class="callout warn">
+    <b>🗓️ 이번 주 · 다음 주 체크할 일정</b>
+    <ul>
+      <li>10월 27~28일: 미국 FOMC 금리 결정</li>
+      <li>매일: 미국 현물 비트코인 ETF 자금 흐름 (파사이드, 소소밸류 등)</li>
+      <li>매일: 브렌트유 가격과 미국 10년물 국채금리</li>
+      <li>11월 3일: 미국 중간선거 (가상자산 규제 법안 향방에 영향)</li>
+    </ul>
+  </div>
+
+  <hr class="dots">
+
+  <h2>7. 3줄 요약 ✍️</h2>
+
+  <div class="summary">
+    <ol>
+      <li>비트코인은 <b>약 81,400달러(약 1억 947만 원)</b>로, 사상 최고가 대비 -35%, 올해 저점 대비 +40% 위치예요.</li>
+      <li>ETF에 사흘간 1조 4천억 원이 들어왔지만, <b>금리 인상 · 고유가 · 국채금리 5%</b>라는 거시경제 역풍이 더 강했어요.</li>
+      <li><b>80,000달러 지지 여부</b>와 <b>10월 27~28일 FOMC</b>가 다음 방향을 정할 가능성이 커요.</li>
+    </ol>
+  </div>
+
+  <p class="center">오늘 정리가 도움이 되셨다면 <b>공감 ❤️과 이웃추가</b> 부탁드려요!<br>
+  궁금한 점은 댓글로 남겨 주세요 😊</p>
+
+  <div class="disclaimer">
+    ⚠️ 이 글은 공개된 자료를 바탕으로 정리한 정보 제공용 글이며, 투자 권유가 아닙니다.
+    가상자산은 변동성이 매우 크니 투자 판단과 책임은 본인에게 있다는 점 꼭 기억해 주세요.
+    시세는 작성 시점(2026년 10월 23일) 기준이며 실시간으로 달라질 수 있습니다.
+  </div>
+
+  <div class="sources">
+    <p style="margin:24px 0 0;"><b>참고 자료</b></p>
+    <ul>
+      <li><a href="https://www.bybit.com/en/price/bitcoin/">Bybit – Bitcoin Price (CoinGecko 데이터)</a></li>
+      <li><a href="https://www.ittimes.com/news/articleView.html?idxno=87572">IT Times – 비트코인 전일비 2.24% 하락…김치 프리미엄 0.85%</a></li>
+      <li><a href="https://mt.co.kr/economy/2026/10/22/2026102215415356825">머니투데이 – 원/달러 환율 1,324.2원</a></li>
+      <li><a href="https://www.benzinga.com/etfs/specialty-etfs/26/10/62531539/bitcoin-etfs-stage-a-1-billion-comeback-but-ether-etfs-cant-catch-a-break-whats-driving-the-divergence">Benzinga – Bitcoin ETFs See $1B Inflows</a></li>
+      <li><a href="https://www.theblock.co/news/markets/2026-10-20-blackrock-ibit-bitcoin-etf-665-million-421102">The Block – IBIT $665 million inflow</a></li>
+      <li><a href="https://etfbit.com/news/bitcoin-etf-flows-week-oct-5-9-2026/">ETFBit – Bitcoin ETF Flows, Oct 5–9</a></li>
+      <li><a href="https://www.investing.com/analysis/bitcoins-80000-floor-faces-pressure-from-tech-and-bond-volatility-200690105">Investing.com – Bitcoin’s $80,000 Floor Faces Pressure</a></li>
+      <li><a href="https://oneminers.com/blogs/news/fed-minutes-october-2026-rate-hike-bitcoin-miners">OneMiners – Fed Minutes Oct 2026 and Bitcoin Miners</a></li>
+      <li><a href="https://www.coingabbar.com/en/crypto-news-today-october-23-bitcoin-81k-eth-dacity-coin-price">CoinGabbar – Crypto News October 23</a></li>
+      <li><a href="https://www.tokenpost.com/news/investing/37776">TokenPost – Bitcoin holds $80,000 support</a></li>
+      <li><a href="https://www.tokenpost.com/news/investing/38506">TokenPost – Bitcoin’s 35% Drawdown Is Shallower Than Earlier Cycles</a></li>
+      <li><a href="https://cryptotimes.io/2026/10/22/bitcoin-price-nears-80k-as-btc-falls-below-50-day-moving-average">CryptoTimes – BTC Falls Below 50-Day Moving Average</a></li>
+      <li><a href="https://www.tipranks.com/news/company-announcements/strategy-highlights-ongoing-bitcoin-focused-capital-markets-activity">TipRanks – Strategy bitcoin holdings update</a></li>
+      <li><a href="https://mudrex.com/learn/when-will-bitcoin-bottom-prediction/">Mudrex – When Will Bitcoin Bottom?</a></li>
+    </ul>
+  </div>
+
+  <div class="tags">
+    #비트코인 #비트코인시세 #비트코인전망 #비트코인현황 #코인시황 #가상자산 #암호화폐
+    #비트코인ETF #FOMC #미국금리 #김치프리미엄 #원달러환율 #업비트 #코인투자 #재테크
+  </div>
+
+</article>
+</div>
+
+<script>
+  const msg = document.getElementById('msg');
+  const post = document.getElementById('post');
+  function flash(text) {
+    msg.textContent = text;
+    clearTimeout(flash.t);
+    flash.t = setTimeout(() => { msg.textContent = ''; }, 2500);
+  }
+  // Selecting the rendered article and copying keeps the computed styles,
+  // which the Naver SmartEditor preserves on paste.
+  document.getElementById('copyRich').addEventListener('click', () => {
+    const range = document.createRange();
+    range.selectNodeContents(post);
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    let ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    sel.removeAllRanges();
+    flash(ok ? '복사 완료! 에디터에 붙여넣으세요' : '복사 실패 — 직접 드래그해 주세요');
+  });
+  document.getElementById('copyText').addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(post.innerText);
+      flash('텍스트 복사 완료!');
+    } catch (e) {
+      flash('복사 실패 — 직접 드래그해 주세요');
+    }
+  });
+</script>
+</body>
+</html>
